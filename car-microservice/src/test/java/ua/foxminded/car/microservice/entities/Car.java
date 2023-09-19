@@ -29,10 +29,10 @@ public class Car {
     private String carId;
 
     @Column(name = "make")
-    private Make make;
+    private String make;
 
     @Column(name = "model")
-    private Model model;
+    private String model;
 
     @Column(name = "year")
     private int year;
@@ -41,11 +41,10 @@ public class Car {
     @JoinTable(schema = "vehicle", name = "cars_categories", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;
 
-    public Car(Make make, Model model, Set<Category> categories) {
+    public Car(String make, String model, int year) {
         this.make = make;
         this.model = model;
-        this.year = model.getYear();
-        this.categories = categories;
+        this.year = year;
     }
 
 }
