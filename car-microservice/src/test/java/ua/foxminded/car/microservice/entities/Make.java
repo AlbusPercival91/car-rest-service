@@ -24,4 +24,9 @@ public class Make {
 
     @Column(name = "maker_name")
     private String makerName;
+
+    public Make(String makerName) {
+        this.makerName = makerName;
+    }
+
 }

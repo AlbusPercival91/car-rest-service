@@ -24,7 +24,7 @@ import lombok.Setter;
 public class Car {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "object_id")
     private String carId;
 
@@ -40,5 +40,12 @@ public class Car {
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
     @JoinTable(schema = "vehicle", name = "cars_categories", joinColumns = @JoinColumn(name = "car_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;
+
+    public Car(Make make, Model model, Set<Category> categories) {
+        this.make = make;
+        this.model = model;
+        this.year = model.getYear();
+        this.categories = categories;
+    }
 
 }

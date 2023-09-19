@@ -27,4 +27,10 @@ public class Model {
 
     @Column(name = "year")
     private int year;
+
+    public Model(String modelName, int year) {
+        this.modelName = modelName;
+        this.year = year;
+    }
+
 }

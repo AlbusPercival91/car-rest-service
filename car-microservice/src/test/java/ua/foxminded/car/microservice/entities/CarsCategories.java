@@ -1,13 +1,10 @@
 package ua.foxminded.car.microservice.entities;
 
-import jakarta.persistence.ManyToMany;
-import java.util.HashSet;
-import java.util.Set;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,22 +14,20 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "category", schema = "vehicle")
-public class Category {
+@Table(name = "cars_categories", schema = "university")
+public class CarsCategories {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "car_id")
+    private String carId;
+
     @Column(name = "category_id")
     private int categoryId;
 
-    @Column(name = "category_name")
-    private String categoryName;
-
-    @ManyToMany(mappedBy = "categories")
-    private Set<Car> cars = new HashSet<>();
-
-    public Category(String categoryName) {
-        this.categoryName = categoryName;
+    public CarsCategories(String carId, int categoryId) {
+        this.carId = carId;
+        this.categoryId = categoryId;
     }
 
 }
