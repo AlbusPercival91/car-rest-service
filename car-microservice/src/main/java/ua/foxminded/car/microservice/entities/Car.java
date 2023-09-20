@@ -1,14 +1,14 @@
 package ua.foxminded.car.microservice.entities;
 
 import java.util.Set;
+import java.util.UUID;
+
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Table;
@@ -24,9 +24,8 @@ import lombok.Setter;
 public class Car {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "object_id")
-    private String carId;
+    @Column(name = "object_id", columnDefinition = "UUID DEFAULT uuid_generate_v4()", updatable = false, nullable = false)
+    private UUID objectId;
 
     @Column(name = "make")
     private String make;
