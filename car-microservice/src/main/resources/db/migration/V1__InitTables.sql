@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS vehicle.category (
 
 CREATE TABLE IF NOT EXISTS vehicle.cars_categories (
     id SERIAL PRIMARY KEY,
-    car_id VARCHAR,
+    car_id UUID,
     category_id INT,
     FOREIGN KEY (car_id) REFERENCES vehicle.car (object_id),
     FOREIGN KEY (category_id) REFERENCES vehicle.category (category_id)

@@ -1,47 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<property name="LOGS" value="./logs" />
+	<!-- Define a variable for the log file location -->
+	<property name="LOG_FILE" value="./logs/car-rest-logger.log" />
 
+	<!-- Console Appender -->
 	<appender name="Console"
 		class="ch.qos.logback.core.ConsoleAppender">
-		<layout class="ch.qos.logback.classic.PatternLayout">
-			<Pattern>
-				%msg%n%throwable
-			</Pattern>
-		</layout>
+		<encoder>
+			<pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
 	</appender>
 
-	<appender name="RollingFile"
+	<!-- Rolling File Appender -->
+	<appender name="File"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOGS}/car-rest-logger.log</file>
-		<encoder
-			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
-		</encoder>
-
+		<file>${LOG_FILE}</file>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOGS}/archived/spring-boot-logger-%d{yyyy-MMM-dd}.%i.log
-			</fileNamePattern>
+			<fileNamePattern>${LOG_FILE}.%d{yyyy-MMM-dd}.%i</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>10MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>30</maxHistory>
 		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
 	</appender>
 
-	<!-- LOG everything at INFO level -->
-	<root level="info">
-		<appender-ref ref="RollingFile" />
+	<!-- Root Logger -->
+	<root level="INFO">
 		<appender-ref ref="Console" />
-	</root>
-
-	<!-- LOG everything at DEBUG level -->
-	<root level="debug">
-		<appender-ref ref="RollingFile" />
-		<appender-ref ref="Console" />
+		<appender-ref ref="File" />
 	</root>
 
 </configuration>
-
