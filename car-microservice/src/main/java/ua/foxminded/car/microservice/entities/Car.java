@@ -2,7 +2,6 @@ package ua.foxminded.car.microservice.entities;
 
 import java.util.Set;
 import java.util.UUID;
-
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.CascadeType;
