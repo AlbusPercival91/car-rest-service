@@ -51,14 +51,6 @@ public class CarService {
         return carRepository.save(existingCar);
     }
 
-    public Optional<Car> findCarById(UUID carId) {
-        return carRepository.findById(carId);
-    }
-
-    public List<Car> listAllCars() {
-        return carRepository.findAll(Sort.by(Sort.Direction.ASC, "objectId"));
-    }
-
     public int assignCarToCategory(UUID carId, String categoryName) {
         return assignCarToCategory(carId, categoryName);
     }
@@ -66,4 +58,25 @@ public class CarService {
     public int removeCarFromCategory(UUID carId, String categoryName) {
         return assignCarToCategory(carId, categoryName);
     }
+
+    public Optional<Car> findCarById(UUID carId) {
+        return carRepository.findById(carId);
+    }
+
+    public List<Car> listAllCars() {
+        return carRepository.findAll(Sort.by(Sort.Direction.ASC, "make"));
+    }
+
+    public List<Car> findCarsByCategory(String categoryName) {
+        return carRepository.findAllByCategoryOrderByMakeAsc(categoryName);
+    }
+
+    public List<Car> findCarsByMake(String make) {
+        return carRepository.findAllByMakeOrderByMakeAsc(make);
+    }
+
+    List<Car> findAllByModel(String model) {
+        return carRepository.findAllByModelOrderByMakeAsc(model);
+    }
+
 }

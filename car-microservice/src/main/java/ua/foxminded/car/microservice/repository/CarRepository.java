@@ -1,5 +1,6 @@
 package ua.foxminded.car.microservice.repository;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -26,4 +27,15 @@ public interface CarRepository extends JpaRepository<Car, UUID> {
                  AND cCt.categoryId IN (SELECT ct.categoryId FROM Category ct WHERE ct.categoryName = :categoryName)
             """)
     int removeCarFromCategory(@Param("carId") UUID carId, @Param("categoryName") String categoryName);
+
+    @Query("""
+            SELECT c FROM Car c
+                 JOIN CarsCategories cCt ON c.objectId = cCt.carId
+                 JOIN Category ct ON ct.categoryId = cCt.categoryId WHERE ct.categoryName = :categoryName
+            """)
+    List<Car> findAllByCategoryOrderByMakeAsc(@Param("categoryName") String categoryName);
+
+    List<Car> findAllByMakeOrderByMakeAsc(String make);
+
+    List<Car> findAllByModelOrderByMakeAsc(String model);
 }
