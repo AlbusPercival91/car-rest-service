@@ -56,7 +56,7 @@ public class CategoryService {
     }
 
     public Optional<Category> findCategoryByName(String categoryName) {
-        return categoryRepository.findByName(categoryName);
+        return categoryRepository.findByCategoryName(categoryName);
     }
 
     public List<Category> listAllCategories() {
