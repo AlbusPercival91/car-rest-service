@@ -1,12 +1,13 @@
 package ua.foxminded.car.microservice.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class CarService {
     public UUID createCar(Car car) {
         if (carRepository.findById(car.getObjectId()).isPresent()) {
             log.info(InfoConstants.CAR_EXISTS);
-            throw new IllegalStateException(InfoConstants.CAR_EXISTS);
+            throw new EntityExistsException(InfoConstants.CAR_EXISTS);
         }
         Car newCar = carRepository.save(car);
         log.info(InfoConstants.CREATE_SUCCESS);
@@ -34,7 +35,7 @@ public class CarService {
     public UUID deleteCarById(UUID carId) {
         if (carRepository.findById(carId).isEmpty()) {
             log.info(InfoConstants.CAR_NOT_FOUND);
-            throw new IllegalStateException(InfoConstants.CAR_NOT_FOUND);
+            throw new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND);
         }
         carRepository.deleteById(carId);
         log.info(InfoConstants.DELETE_SUCCESS);
@@ -44,7 +45,7 @@ public class CarService {
     public Car updateCarById(UUID carId, Car targetCar) {
         Car existingCar = carRepository.findById(carId).orElseThrow(() -> {
             log.warn(InfoConstants.CAR_NOT_FOUND);
-            return new NoSuchElementException(InfoConstants.CAR_NOT_FOUND);
+            return new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND);
         });
 
         BeanUtils.copyProperties(targetCar, existingCar, "objectId");

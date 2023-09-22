@@ -1,8 +1,9 @@
 package ua.foxminded.car.microservice.service;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
@@ -23,7 +24,7 @@ public class CategoryService {
     public int createCategory(Category category) {
         if (categoryRepository.findById(category.getCategoryId()).isPresent()) {
             log.info(InfoConstants.CATEGORY_EXISTS);
-            throw new IllegalStateException(InfoConstants.CATEGORY_EXISTS);
+            throw new EntityExistsException(InfoConstants.CATEGORY_EXISTS);
         }
         Category newCategory = categoryRepository.save(category);
         log.info(InfoConstants.CREATE_SUCCESS);
@@ -33,7 +34,7 @@ public class CategoryService {
     public int deleteCategoryById(int categoryId) {
         if (categoryRepository.findById(categoryId).isEmpty()) {
             log.info(InfoConstants.CATEGORY_NOT_FOUND);
-            throw new IllegalStateException(InfoConstants.CATEGORY_NOT_FOUND);
+            throw new EntityNotFoundException(InfoConstants.CATEGORY_NOT_FOUND);
         }
         categoryRepository.deleteById(categoryId);
         log.info(InfoConstants.DELETE_SUCCESS);
@@ -43,7 +44,7 @@ public class CategoryService {
     public Category updateCategoryById(int categoryId, Category targetCategory) {
         Category existingCategory = categoryRepository.findById(categoryId).orElseThrow(() -> {
             log.warn(InfoConstants.CATEGORY_NOT_FOUND);
-            return new NoSuchElementException(InfoConstants.CATEGORY_NOT_FOUND);
+            return new EntityNotFoundException(InfoConstants.CATEGORY_NOT_FOUND);
         });
 
         BeanUtils.copyProperties(targetCategory, existingCategory, "categoryId");
