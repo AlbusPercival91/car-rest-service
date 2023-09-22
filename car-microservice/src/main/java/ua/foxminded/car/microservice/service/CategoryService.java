@@ -3,6 +3,7 @@ package ua.foxminded.car.microservice.service;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,10 @@ public class CategoryService {
 
         BeanUtils.copyProperties(targetCategory, existingCategory, "categoryId");
         return categoryRepository.save(existingCategory);
+    }
+
+    public Optional<Category> findCategoryById(int categoryId) {
+        return categoryRepository.findById(categoryId);
     }
 
     public List<Category> listAllCategories() {

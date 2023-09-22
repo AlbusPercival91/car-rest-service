@@ -2,6 +2,7 @@ package ua.foxminded.car.microservice.service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
@@ -50,7 +51,19 @@ public class CarService {
         return carRepository.save(existingCar);
     }
 
+    public Optional<Car> findCarById(UUID carId) {
+        return carRepository.findById(carId);
+    }
+
     public List<Car> listAllCars() {
         return carRepository.findAll(Sort.by(Sort.Direction.ASC, "objectId"));
+    }
+
+    public int assignCarToCategory(UUID carId, String categoryName) {
+        return assignCarToCategory(carId, categoryName);
+    }
+
+    public int removeCarFromCategory(UUID carId, String categoryName) {
+        return assignCarToCategory(carId, categoryName);
     }
 }

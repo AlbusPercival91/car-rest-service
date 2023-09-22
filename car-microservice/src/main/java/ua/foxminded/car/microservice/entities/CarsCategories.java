@@ -29,9 +29,4 @@ public class CarsCategories {
     @Column(name = "category_id")
     private int categoryId;
 
-    public CarsCategories(UUID carId, int categoryId) {
-        this.carId = carId;
-        this.categoryId = categoryId;
-    }
-
 }
