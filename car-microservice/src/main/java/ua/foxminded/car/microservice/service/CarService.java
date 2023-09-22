@@ -75,8 +75,12 @@ public class CarService {
         return carRepository.findAllByMakeOrderByMakeAsc(make);
     }
 
-    List<Car> findAllByModel(String model) {
+    public List<Car> findCarsByModel(String model) {
         return carRepository.findAllByModelOrderByMakeAsc(model);
+    }
+
+    public List<Car> findCarsByYearBetween(int yearFrom, int yearTo) {
+        return carRepository.findAllByYearBetween(yearFrom, yearTo);
     }
 
 }

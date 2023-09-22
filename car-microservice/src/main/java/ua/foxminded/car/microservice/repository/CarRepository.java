@@ -38,4 +38,6 @@ public interface CarRepository extends JpaRepository<Car, UUID> {
     List<Car> findAllByMakeOrderByMakeAsc(String make);
 
     List<Car> findAllByModelOrderByMakeAsc(String model);
+
+    List<Car> findAllByYearBetween(int yearFrom, int yearTo);
 }
