@@ -54,6 +54,10 @@ public class CategoryService {
         return categoryRepository.findById(categoryId);
     }
 
+    public Optional<Category> findCategoryByName(String categoryName) {
+        return categoryRepository.findByName(categoryName);
+    }
+
     public List<Category> listAllCategories() {
         return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "categoryId"));
     }
