@@ -3,7 +3,7 @@ INSERT INTO vehicle.car (make, model, year)
 VALUES
     ('VW', 'Jetta', 2006),
     ('Hyundai', 'Getz', 2007),
-    ('VW', 'Toureg', 2006),
+    ('Audi', 'Q3', 2011),
     ('Scoda', 'Octavia', 2013);
 
 -- Generate test data for vehicle.category
