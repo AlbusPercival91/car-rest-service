@@ -77,4 +77,24 @@ class CarServiceTest {
                 () -> carService.updateCarById(car.getObjectId(), expectedCar));
         Assertions.assertEquals(InfoConstants.CAR_NOT_FOUND, entityNotFoundException.getMessage());
     }
+
+    @ParameterizedTest
+    @CsvSource({ "VW, Sedan", "Hyundai, Hatchback", "Audi, SUV", "Scoda, Sedan" })
+    void testAssignCarToCategory_ShouldReturnAssignedQuantity(String make, String categoryName) {
+        List<Car> cars = carService.findCarsByMake(make);
+
+        for (Car car : cars) {
+            Assertions.assertEquals(1, carService.assignCarToCategory(car.getObjectId(), categoryName));
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "VW, Sedan", "Hyundai, Hatchback", "Audi, SUV", "Scoda, Sedan" })
+    void testRemoveCarFromCategory_ShouldReturnRemovedQuantity(String make, String categoryName) {
+        List<Car> cars = carService.findCarsByMake(make);
+
+        for (Car car : cars) {
+            Assertions.assertEquals(1, carService.removeCarFromCategory(car.getObjectId(), categoryName));
+        }
+    }
 }

@@ -45,4 +45,10 @@ public class Car {
         this.year = year;
     }
 
+    @Override
+    public String toString() {
+        return "Car(id=" + objectId + ", make=" + make + ", model=" + model + ", year=" + year
+                + (categories != null ? ", categories=" + categories : "") + ")";
+    }
+
 }

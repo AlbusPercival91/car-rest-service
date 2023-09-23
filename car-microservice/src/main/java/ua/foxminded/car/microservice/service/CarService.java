@@ -53,11 +53,11 @@ public class CarService {
     }
 
     public int assignCarToCategory(UUID carId, String categoryName) {
-        return assignCarToCategory(carId, categoryName);
+        return carRepository.assignCarToCategory(carId, categoryName);
     }
 
     public int removeCarFromCategory(UUID carId, String categoryName) {
-        return assignCarToCategory(carId, categoryName);
+        return carRepository.assignCarToCategory(carId, categoryName);
     }
 
     public Optional<Car> findCarById(UUID carId) {

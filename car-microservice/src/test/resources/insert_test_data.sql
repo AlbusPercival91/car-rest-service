@@ -29,7 +29,7 @@ FROM
             WHERE car_id = c.object_id
         )
         ORDER BY random()
-        LIMIT 5 
+        LIMIT 1
     ) AS ct ON true;    
 
     
