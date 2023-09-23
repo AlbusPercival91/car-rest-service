@@ -16,8 +16,8 @@ VALUES
 -- Insert sample data for vehicle.cars_categories
 INSERT INTO vehicle.cars_categories (car_id, category_id)
 SELECT
-    c.object_id,    s
-    ct.category_id  c
+    c.object_id,  
+    ct.category_id 
 FROM
    vehicle.car AS c
     JOIN LATERAL (
@@ -30,7 +30,7 @@ FROM
         )
         ORDER BY random()
         LIMIT 5 
-    ) AS c ON true;    
+    ) AS ct ON true;    
 
     
     
