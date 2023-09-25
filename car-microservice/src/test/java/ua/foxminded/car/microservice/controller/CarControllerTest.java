@@ -24,9 +24,8 @@ class CarControllerTest {
     private CarService carService;
 
     @Test
-    void testGetAllCars() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("/api/v1/cars"));
+    void testCreateCar() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cars"))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 }
