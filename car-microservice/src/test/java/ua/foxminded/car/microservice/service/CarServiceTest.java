@@ -97,4 +97,10 @@ class CarServiceTest {
             Assertions.assertEquals(1, carService.removeCarFromCategory(car.getObjectId(), categoryName));
         }
     }
+
+    @ParameterizedTest
+    @CsvSource({ "Sedan", "Hatchback", "SUV" })
+    void testFindAllByCategory(String categoryName) {
+        Assertions.assertTrue(!carService.findCarsByCategory(categoryName).isEmpty());
+    }
 }
