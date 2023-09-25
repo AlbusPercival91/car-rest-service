@@ -1,7 +1,8 @@
 package ua.foxminded.car.microservice.repository;
 
-import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,11 +34,11 @@ public interface CarRepository extends JpaRepository<Car, UUID> {
                  JOIN CarsCategories cCt ON c.objectId = cCt.carId
                  JOIN Category ct ON ct.categoryId = cCt.categoryId WHERE ct.categoryName = :categoryName
             """)
-    List<Car> findAllByCategoryOrderByMakeAsc(@Param("categoryName") String categoryName);
+    Page<Car> findAllByCategory(@Param("categoryName") String categoryName, Pageable pageable);
 
-    List<Car> findAllByMakeOrderByMakeAsc(String make);
+    Page<Car> findAllByMake(String make, Pageable pageable);
 
-    List<Car> findAllByModelOrderByMakeAsc(String model);
+    Page<Car> findAllByModel(String model, Pageable pageable);
 
-    List<Car> findAllByYearBetween(int yearFrom, int yearTo);
+    Page<Car> findAllByYearBetween(int yearFrom, int yearTo, Pageable pageable);
 }

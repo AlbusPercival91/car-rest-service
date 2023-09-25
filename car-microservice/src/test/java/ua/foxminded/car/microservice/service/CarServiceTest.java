@@ -1,7 +1,6 @@
 package ua.foxminded.car.microservice.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -14,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import ua.foxminded.car.microservice.entities.Car;
@@ -31,9 +31,9 @@ class CarServiceTest {
     private CarService carService;
 
     @ParameterizedTest
-    @CsvSource({ "VW", "Hyundai", "Scoda" })
-    void testDeleteCarById_ShouldReturnCarId(String make) {
-        List<Car> cars = carService.findCarsByMake(make);
+    @CsvSource({ "VW, 0, 10, make, asc", "Hyundai, 0, 10, make, asc", "Scoda, 0, 10, make, asc" })
+    void testDeleteCarById_ShouldReturnCarId(String make, int page, int size, String sortBy, String sortOrder) {
+        Page<Car> cars = carService.findCarsByMake(make, page, size, sortBy, sortOrder);
 
         for (Car car : cars) {
             Assertions.assertEquals(car.getObjectId(), carService.deleteCarById(car.getObjectId()));
@@ -51,9 +51,11 @@ class CarServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "VW, Passat, 2006", "Hyundai, Tucson, 2007", "Audi, A5, 2011", "Scoda, Superb, 2013" })
-    void testUpdateCarById_ShouldReturnUpdatedCar(String make, String model, int year) {
-        List<Car> cars = carService.findCarsByMake(make);
+    @CsvSource({ "VW, Passat, 2006, 0, 10, make, asc", "Hyundai, Tucson, 2007, 0, 10, make, asc",
+            "Audi, A5, 2011, 0, 10, make, asc", "Scoda, Superb, 2013, 0, 10, make, asc" })
+    void testUpdateCarById_ShouldReturnUpdatedCar(String make, String model, int year, int page, int size,
+            String sortBy, String sortOrder) {
+        Page<Car> cars = carService.findCarsByMake(make, page, size, sortBy, sortOrder);
 
         Car expectedCar = new Car(make, model, year);
 
@@ -79,9 +81,10 @@ class CarServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "VW, Sedan", "Hyundai, Hatchback", "Audi, SUV", "Scoda, Sedan" })
-    void testAssignCarToCategory_ShouldReturnAssignedQuantity(String make, String categoryName) {
-        List<Car> cars = carService.findCarsByMake(make);
+    @CsvSource({ "VW, Sedan, 0, 10, make, asc", "Hyundai, Hatchback, 0, 10, make, asc" })
+    void testAssignCarToCategory_ShouldReturnAssignedQuantity(String make, String categoryName, int page, int size,
+            String sortBy, String sortOrder) {
+        Page<Car> cars = carService.findCarsByMake(make, page, size, sortBy, sortOrder);
 
         for (Car car : cars) {
             Assertions.assertEquals(1, carService.assignCarToCategory(car.getObjectId(), categoryName));
@@ -89,9 +92,10 @@ class CarServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "VW, Sedan", "Hyundai, Hatchback", "Audi, SUV", "Scoda, Sedan" })
-    void testRemoveCarFromCategory_ShouldReturnRemovedQuantity(String make, String categoryName) {
-        List<Car> cars = carService.findCarsByMake(make);
+    @CsvSource({ "VW, Sedan, 0, 10, make, asc", "Hyundai, Hatchback, 0, 10, make, asc" })
+    void testRemoveCarFromCategory_ShouldReturnRemovedQuantity(String make, String categoryName, int page, int size,
+            String sortBy, String sortOrder) {
+        Page<Car> cars = carService.findCarsByMake(make, page, size, sortBy, sortOrder);
 
         for (Car car : cars) {
             Assertions.assertEquals(1, carService.removeCarFromCategory(car.getObjectId(), categoryName));
@@ -99,8 +103,8 @@ class CarServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "Sedan", "Hatchback", "SUV" })
-    void testFindAllByCategory(String categoryName) {
-        Assertions.assertTrue(!carService.findCarsByCategory(categoryName).isEmpty());
+    @CsvSource({ "Sedan, 0, 10, make, asc", "Hatchback, 0, 10, make, asc", "SUV, 0, 10, make, asc" })
+    void testFindAllByCategory(String categoryName, int page, int size, String sortBy, String sortOrder) {
+        Assertions.assertTrue(!carService.findCarsByCategory(categoryName, page, size, sortBy, sortOrder).isEmpty());
     }
 }

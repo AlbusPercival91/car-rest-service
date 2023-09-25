@@ -1,9 +1,11 @@
 package ua.foxminded.car.microservice.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityExistsException;
@@ -64,24 +66,45 @@ public class CarService {
         return carRepository.findById(carId);
     }
 
-    public List<Car> listAllCars() {
-        return carRepository.findAll(Sort.by(Sort.Direction.ASC, "make"));
+    public Page<Car> listAllCars(int page, int size, String sortBy, String sortOrder) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
+        return carRepository.findAll(pageRequest);
     }
 
-    public List<Car> findCarsByCategory(String categoryName) {
-        return carRepository.findAllByCategoryOrderByMakeAsc(categoryName);
+    public Page<Car> findCarsByCategory(String categoryName, int page, int size, String sortBy, String sortOrder) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
+        return carRepository.findAllByCategory(categoryName, pageRequest);
     }
 
-    public List<Car> findCarsByMake(String make) {
-        return carRepository.findAllByMakeOrderByMakeAsc(make);
+    public Page<Car> findCarsByMake(String make, int page, int size, String sortBy, String sortOrder) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
+        return carRepository.findAllByMake(make, pageRequest);
     }
 
-    public List<Car> findCarsByModel(String model) {
-        return carRepository.findAllByModelOrderByMakeAsc(model);
+    public Page<Car> findCarsByModel(String model, int page, int size, String sortBy, String sortOrder) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
+        return carRepository.findAllByModel(model, pageRequest);
     }
 
-    public List<Car> findCarsByYearBetween(int yearFrom, int yearTo) {
-        return carRepository.findAllByYearBetween(yearFrom, yearTo);
+    public Page<Car> findCarsByYearBetween(int yearFrom, int yearTo, int page, int size, String sortBy,
+            String sortOrder) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
+        return carRepository.findAllByYearBetween(yearFrom, yearTo, pageRequest);
+    }
+
+    public Page<Car> searchCars(String make, String model, Integer minYear, Integer maxYear, String category,
+            Pageable pageable) {
+        if (category != null && !category.isEmpty()) {
+            return carRepository.findAllByCategory(category, pageable);
+        } else if (make != null && !make.isEmpty()) {
+            return carRepository.findAllByMake(make, pageable);
+        } else if (model != null && !model.isEmpty()) {
+            return carRepository.findAllByModel(model, pageable);
+        } else if (minYear != null && maxYear != null) {
+            return carRepository.findAllByYearBetween(minYear, maxYear, pageable);
+        } else {
+            return carRepository.findAll(pageable);
+        }
     }
 
 }
