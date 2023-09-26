@@ -55,13 +55,52 @@ class CarControllerTest {
     @Test
     void updateCarTest() throws Exception {
         UUID carId = UUID.randomUUID();
-
         Car updatedCar = new Car("Toyota", "Camry", 2011);
-
-        when(carService.updateCarById(carId, updatedCar)).thenReturn(updatedCar);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/cars/{carId}", carId)
                 .contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(updatedCar)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @Test
+    void deleteCarTest() throws Exception {
+        UUID carId = UUID.randomUUID();
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/cars/{carId}", carId))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    void assignCarToCategoryTest() throws Exception {
+        UUID carId = UUID.randomUUID();
+        String categoryName = "Sedan";
+
+        when(carService.assignCarToCategory(carId, categoryName)).thenReturn(1);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cars/{carId}/assign-category", carId).param("categoryName",
+                categoryName)).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void removeCarFromCategoryTest() throws Exception {
+        UUID carId = UUID.randomUUID();
+        String categoryName = "Sedan";
+
+        when(carService.removeCarFromCategory(carId, categoryName)).thenReturn(1);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cars/{carId}/remove-category", carId).param("categoryName",
+                categoryName)).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void listCarsTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars")).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void searchCarsTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars/search"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
 }
