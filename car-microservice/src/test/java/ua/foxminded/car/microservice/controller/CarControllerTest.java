@@ -4,8 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.UUID;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,7 +19,6 @@ import ua.foxminded.car.microservice.service.CarService;
 
 @WebMvcTest({ CarController.class })
 @ActiveProfiles("test-container")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class CarControllerTest {
 
     @Autowired
