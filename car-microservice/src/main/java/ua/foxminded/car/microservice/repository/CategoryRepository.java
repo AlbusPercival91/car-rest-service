@@ -1,7 +1,7 @@
 package ua.foxminded.car.microservice.repository;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,9 +13,9 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Optional<Category> findByCategoryName(String categoryName);
 
     @Query("""
-            SELECT c FROM Category ct
+            SELECT ct FROM Category ct
                  JOIN ct.cars c
-                 WHERE c.carId = :carId
+                 WHERE c.objectId = :carId
             """)
-    List<Category> getCarCategories(@Param("carId") UUID carId);
+    Set<Category> getCarCategories(@Param("carId") UUID carId);
 }

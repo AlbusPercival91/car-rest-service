@@ -2,6 +2,7 @@ package ua.foxminded.car.microservice.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -15,11 +16,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import ua.foxminded.car.microservice.entities.Car;
 import ua.foxminded.car.microservice.entities.Category;
 import ua.foxminded.university.dao.validation.InfoConstants;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
-        CategoryService.class, }))
+        CategoryService.class, CarService.class }))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test-container")
 @Sql(scripts = { "/drop_data.sql", "/init_tables.sql",
@@ -29,6 +31,9 @@ class CategoryServiceTest {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CarService carservice;
 
     @ParameterizedTest
     @CsvSource({ "1", "2", "3" })
@@ -68,5 +73,18 @@ class CategoryServiceTest {
         Exception entityNotFoundException = assertThrows(Exception.class,
                 () -> categoryService.updateCategoryById(categoryId, expectedCategory));
         Assertions.assertEquals(InfoConstants.CATEGORY_NOT_FOUND, entityNotFoundException.getMessage());
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "Dodge, Neon, 2003, 1", "Nissan, Skyline, 1999, 2", "Opel, Omega, 1997, 3" })
+    void testGetCarCategories(String make, String model, int year, int categoryId) {
+        Optional<Category> category = categoryService.findCategoryById(categoryId);
+        Car car = new Car(make, model, year);
+        car.setObjectId(UUID.randomUUID());
+
+        carservice.createCar(car);
+        carservice.assignCarToCategory(car.getObjectId(), category.get().getCategoryName());
+
+        Assertions.assertTrue(categoryService.getCarCategories(car.getObjectId()).contains(category.get()));
     }
 }

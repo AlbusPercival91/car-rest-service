@@ -3,8 +3,8 @@ package ua.foxminded.car.microservice.service;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -67,7 +67,7 @@ public class CategoryService {
         return categoryRepository.findAll(pageRequest);
     }
 
-    public List<Category> getCarCategories(UUID carId) {
+    public Set<Category> getCarCategories(UUID carId) {
         return categoryRepository.getCarCategories(carId);
     }
 }
