@@ -72,7 +72,7 @@ public class CarController {
     @PostMapping("/{carId}/remove-category")
     public ResponseEntity<Void> removeCarFromCategory(@PathVariable UUID carId, @RequestParam String categoryName) {
         try {
-            carService.assignCarToCategory(carId, categoryName);
+            carService.removeCarFromCategory(carId, categoryName);
             return ResponseEntity.ok().build();
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
