@@ -17,9 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import ua.foxminded.car.microservice.entities.Car;
+import ua.foxminded.car.microservice.entities.Category;
 import ua.foxminded.university.dao.validation.InfoConstants;
 
-@DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { CarService.class, }))
+@DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { CarService.class,
+        CategoryService.class }))
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test-container")
 @Sql(scripts = { "/drop_data.sql", "/init_tables.sql",
@@ -29,6 +31,9 @@ class CarServiceTest {
 
     @Autowired
     private CarService carService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @ParameterizedTest
     @CsvSource({ "VW, 0, 10, make, asc", "Hyundai, 0, 10, make, asc", "Scoda, 0, 10, make, asc" })
@@ -81,10 +86,11 @@ class CarServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "VW, Sedan, 0, 10, make, asc", "Hyundai, Hatchback, 0, 10, make, asc" })
+    @CsvSource({ "VW, testCategory1, 0, 10, make, asc", "Hyundai, testCategory2, 0, 10, make, asc" })
     void testAssignCarToCategory_ShouldReturnAssignedQuantity(String make, String categoryName, int page, int size,
             String sortBy, String sortOrder) {
         Page<Car> cars = carService.findCarsByMake(make, page, size, sortBy, sortOrder);
+        categoryService.createCategory(new Category(categoryName));
 
         for (Car car : cars) {
             Assertions.assertEquals(1, carService.assignCarToCategory(car.getObjectId(), categoryName));
@@ -92,12 +98,14 @@ class CarServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "VW, Sedan, 0, 10, make, asc", "Hyundai, Hatchback, 0, 10, make, asc" })
+    @CsvSource({ "VW, testCategory1, 0, 10, make, asc", "Hyundai, testCategory2, 0, 10, make, asc" })
     void testRemoveCarFromCategory_ShouldReturnRemovedQuantity(String make, String categoryName, int page, int size,
             String sortBy, String sortOrder) {
         Page<Car> cars = carService.findCarsByMake(make, page, size, sortBy, sortOrder);
+        categoryService.createCategory(new Category(categoryName));
 
         for (Car car : cars) {
+            carService.assignCarToCategory(car.getObjectId(), categoryName);
             Assertions.assertEquals(1, carService.removeCarFromCategory(car.getObjectId(), categoryName));
         }
     }

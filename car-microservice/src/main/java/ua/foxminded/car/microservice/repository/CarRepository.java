@@ -41,4 +41,6 @@ public interface CarRepository extends JpaRepository<Car, UUID> {
     Page<Car> findAllByModel(String model, Pageable pageable);
 
     Page<Car> findAllByYearBetween(int yearFrom, int yearTo, Pageable pageable);
+
+    boolean existsByObjectIdAndCategoriesCategoryName(UUID objectId, String categoryName);
 }

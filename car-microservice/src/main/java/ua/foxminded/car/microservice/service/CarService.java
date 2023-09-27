@@ -26,7 +26,7 @@ public class CarService {
 
     public UUID createCar(Car car) {
         if (carRepository.findById(car.getObjectId()).isPresent()) {
-            log.info(InfoConstants.CAR_EXISTS);
+            log.warn(InfoConstants.CAR_EXISTS);
             throw new EntityExistsException(InfoConstants.CAR_EXISTS);
         }
         Car newCar = carRepository.save(car);
@@ -36,7 +36,7 @@ public class CarService {
 
     public UUID deleteCarById(UUID carId) {
         if (carRepository.findById(carId).isEmpty()) {
-            log.info(InfoConstants.CAR_NOT_FOUND);
+            log.warn(InfoConstants.CAR_NOT_FOUND);
             throw new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND);
         }
         carRepository.deleteById(carId);
@@ -49,17 +49,26 @@ public class CarService {
             log.warn(InfoConstants.CAR_NOT_FOUND);
             return new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND);
         });
-
         BeanUtils.copyProperties(targetCar, existingCar, "objectId");
         return carRepository.save(existingCar);
     }
 
     public int assignCarToCategory(UUID carId, String categoryName) {
-        return carRepository.assignCarToCategory(carId, categoryName);
+        if (!carRepository.existsByObjectIdAndCategoriesCategoryName(carId, categoryName)) {
+            log.info(InfoConstants.ASSIGN_SUCCESS);
+            return carRepository.assignCarToCategory(carId, categoryName);
+        }
+        log.warn(InfoConstants.CAR_BELONGS_TO_CATEGORY);
+        throw new IllegalStateException(InfoConstants.CAR_BELONGS_TO_CATEGORY);
     }
 
     public int removeCarFromCategory(UUID carId, String categoryName) {
-        return carRepository.assignCarToCategory(carId, categoryName);
+        if (carRepository.existsByObjectIdAndCategoriesCategoryName(carId, categoryName)) {
+            log.info(InfoConstants.DELETE_SUCCESS);
+            return carRepository.removeCarFromCategory(carId, categoryName);
+        }
+        log.warn(InfoConstants.CAR_NOT_BELONGS_TO_CATEGORY);
+        throw new IllegalStateException(InfoConstants.CAR_NOT_BELONGS_TO_CATEGORY);
     }
 
     public Optional<Car> findCarById(UUID carId) {

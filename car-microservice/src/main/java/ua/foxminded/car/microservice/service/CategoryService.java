@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ua.foxminded.car.microservice.entities.Category;
+import ua.foxminded.car.microservice.repository.CarRepository;
 import ua.foxminded.car.microservice.repository.CategoryRepository;
 import ua.foxminded.university.dao.validation.InfoConstants;
 
@@ -23,7 +24,7 @@ import ua.foxminded.university.dao.validation.InfoConstants;
 @Transactional
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final CarService carService;
+    private final CarRepository carRepository;
 
     public int createCategory(Category category) {
         if (categoryRepository.findById(category.getCategoryId()).isPresent()) {
@@ -69,7 +70,7 @@ public class CategoryService {
     }
 
     public Set<Category> getCarCategories(UUID carId) {
-        if (carService.findCarById(carId).isPresent()) {
+        if (carRepository.findById(carId).isPresent()) {
             return categoryRepository.getCarCategories(carId);
         }
         log.warn(InfoConstants.CAR_NOT_FOUND);
