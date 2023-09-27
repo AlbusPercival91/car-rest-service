@@ -21,6 +21,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.car.microservice.entities.Car;
 import ua.foxminded.car.microservice.service.CarService;
+import ua.foxminded.university.dao.validation.InfoConstants;
 
 @WebMvcTest({ CarController.class })
 @ActiveProfiles("test-container")
@@ -49,7 +50,7 @@ class CarControllerTest {
     void testCreateCar_Failure_ShouldGiveStatusIsConflict() throws Exception {
         Car car = new Car("Toyota", "Camry", 2011);
 
-        when(carService.createCar(any(Car.class))).thenThrow(new EntityExistsException());
+        when(carService.createCar(any(Car.class))).thenThrow(new EntityExistsException(InfoConstants.CAR_EXISTS));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cars").contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(car)))
@@ -68,7 +69,7 @@ class CarControllerTest {
     void testDeleteCar_Failure_ShouldGiveStatusIsNotFound() throws Exception {
         UUID carId = UUID.randomUUID();
 
-        when(carService.deleteCarById(carId)).thenThrow(new EntityNotFoundException());
+        when(carService.deleteCarById(carId)).thenThrow(new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND));
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/cars/{carId}", carId))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -89,7 +90,8 @@ class CarControllerTest {
         UUID carId = UUID.randomUUID();
         Car updatedCar = new Car("Toyota", "Camry", 2011);
 
-        when(carService.updateCarById(eq(carId), any(Car.class))).thenThrow(new EntityNotFoundException());
+        when(carService.updateCarById(eq(carId), any(Car.class)))
+                .thenThrow(new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/cars/{carId}", carId)
                 .contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(updatedCar)))
@@ -112,7 +114,8 @@ class CarControllerTest {
         UUID carId = UUID.randomUUID();
         String categoryName = "Sedan";
 
-        when(carService.assignCarToCategory(carId, categoryName)).thenThrow(new IllegalStateException());
+        when(carService.assignCarToCategory(carId, categoryName))
+                .thenThrow(new IllegalStateException(InfoConstants.CAR_BELONGS_TO_CATEGORY));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cars/{carId}/assign-category", carId).param("categoryName",
                 categoryName)).andExpect(MockMvcResultMatchers.status().isConflict());
@@ -134,7 +137,8 @@ class CarControllerTest {
         UUID carId = UUID.randomUUID();
         String categoryName = "Sedan";
 
-        when(carService.removeCarFromCategory(carId, categoryName)).thenThrow(new IllegalStateException());
+        when(carService.removeCarFromCategory(carId, categoryName))
+                .thenThrow(new IllegalStateException(InfoConstants.CAR_NOT_BELONGS_TO_CATEGORY));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/cars/{carId}/remove-category", carId).param("categoryName",
                 categoryName)).andExpect(MockMvcResultMatchers.status().isConflict());
