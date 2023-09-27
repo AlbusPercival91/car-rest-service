@@ -23,6 +23,7 @@ import ua.foxminded.university.dao.validation.InfoConstants;
 @Transactional
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CarService carService;
 
     public int createCategory(Category category) {
         if (categoryRepository.findById(category.getCategoryId()).isPresent()) {
@@ -68,6 +69,9 @@ public class CategoryService {
     }
 
     public Set<Category> getCarCategories(UUID carId) {
-        return categoryRepository.getCarCategories(carId);
+        if (carService.findCarById(carId).isPresent()) {
+            return categoryRepository.getCarCategories(carId);
+        }
+        throw new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND);
     }
 }

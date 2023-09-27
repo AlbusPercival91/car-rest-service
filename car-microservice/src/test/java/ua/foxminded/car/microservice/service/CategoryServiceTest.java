@@ -77,7 +77,7 @@ class CategoryServiceTest {
 
     @ParameterizedTest
     @CsvSource({ "Dodge, Neon, 2003, 1", "Nissan, Skyline, 1999, 2", "Opel, Omega, 1997, 3" })
-    void testGetCarCategories(String make, String model, int year, int categoryId) {
+    void testGetCarCategories_ShouldReturnCarCategories(String make, String model, int year, int categoryId) {
         Optional<Category> category = categoryService.findCategoryById(categoryId);
         Car car = new Car(make, model, year);
         car.setObjectId(UUID.randomUUID());
@@ -86,5 +86,15 @@ class CategoryServiceTest {
         carservice.assignCarToCategory(car.getObjectId(), category.get().getCategoryName());
 
         Assertions.assertTrue(categoryService.getCarCategories(car.getObjectId()).contains(category.get()));
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "1", "2", "3" })
+    void testGetCarCategories_WhenCarNotFound_ShouldThrowEntityNotFoundException(int categoryId) {
+        Optional<Category> category = categoryService.findCategoryById(categoryId);
+
+        Exception entityNotFoundException = assertThrows(Exception.class,
+                () -> categoryService.getCarCategories(UUID.randomUUID()).contains(category.get()));
+        Assertions.assertEquals(InfoConstants.CAR_NOT_FOUND, entityNotFoundException.getMessage());
     }
 }
