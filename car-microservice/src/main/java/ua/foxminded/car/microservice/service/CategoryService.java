@@ -5,7 +5,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +62,12 @@ public class CategoryService {
         return categoryRepository.findByCategoryName(categoryName);
     }
 
-    public List<Category> listAllCategories() {
-        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "categoryName"));
+    public Page<Category> listAllCategories(int page, int size, String sortBy, String sortOrder) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
+        return categoryRepository.findAll(pageRequest);
+    }
+
+    public List<Category> getCarCategories(UUID carId) {
+        return categoryRepository.getCarCategories(carId);
     }
 }
