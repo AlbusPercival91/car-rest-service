@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.car.microservice.entities.Car;
 import ua.foxminded.car.microservice.service.CarService;
 
@@ -28,48 +31,58 @@ public class CarController {
 
     @PostMapping
     public ResponseEntity<UUID> createCar(@RequestBody Car car) {
-        UUID carId = carService.createCar(car);
-        return ResponseEntity.ok(carId);
+        try {
+            UUID carId = carService.createCar(car);
+            return ResponseEntity.ok(carId);
+        } catch (EntityExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @DeleteMapping("/{carId}")
+    public ResponseEntity<Void> deleteCar(@PathVariable UUID carId) {
+        try {
+            carService.deleteCarById(carId);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping("/{carId}")
+    public ResponseEntity<Car> updateCar(@PathVariable UUID carId, @RequestBody Car car) {
+        try {
+            Car updatedCar = carService.updateCarById(carId, car);
+            return ResponseEntity.ok(updatedCar);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/{carId}/assign-category")
+    public ResponseEntity<Void> assignCarToCategory(@PathVariable UUID carId, @RequestParam String categoryName) {
+        try {
+            carService.assignCarToCategory(carId, categoryName);
+            return ResponseEntity.ok().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @PostMapping("/{carId}/remove-category")
+    public ResponseEntity<Void> removeCarFromCategory(@PathVariable UUID carId, @RequestParam String categoryName) {
+        try {
+            carService.assignCarToCategory(carId, categoryName);
+            return ResponseEntity.ok().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @GetMapping("/{carId}")
     public ResponseEntity<Car> getCar(@PathVariable UUID carId) {
         Optional<Car> car = carService.findCarById(carId);
         return car.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/{carId}")
-    public ResponseEntity<Car> updateCar(@PathVariable UUID carId, @RequestBody Car car) {
-        Car updatedCar = carService.updateCarById(carId, car);
-        return ResponseEntity.ok(updatedCar);
-    }
-
-    @DeleteMapping("/{carId}")
-    public ResponseEntity<Void> deleteCar(@PathVariable UUID carId) {
-        carService.deleteCarById(carId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/{carId}/assign-category")
-    public ResponseEntity<Void> assignCarToCategory(@PathVariable UUID carId, @RequestParam String categoryName) {
-        int result = carService.assignCarToCategory(carId, categoryName);
-
-        if (result > 0) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping("/{carId}/remove-category")
-    public ResponseEntity<Void> removeCarFromCategory(@PathVariable UUID carId, @RequestParam String categoryName) {
-        int result = carService.removeCarFromCategory(carId, categoryName);
-
-        if (result > 0) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     @GetMapping
