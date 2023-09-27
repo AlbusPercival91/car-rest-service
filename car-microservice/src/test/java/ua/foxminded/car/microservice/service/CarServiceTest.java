@@ -98,6 +98,22 @@ class CarServiceTest {
     }
 
     @ParameterizedTest
+    @CsvSource({ "VW, testCategory, 0, 10, make, asc", "Hyundai, testCategory, 0, 10, make, asc" })
+    void testAssignCarToCategory_WhenCarAlreadyAssigned_ShouldThrowIllegalStateException(String make,
+            String categoryName, int page, int size, String sortBy, String sortOrder) {
+        Page<Car> cars = carService.findCarsByMake(make, page, size, sortBy, sortOrder);
+        categoryService.createCategory(new Category(categoryName));
+
+        for (Car car : cars) {
+            carService.assignCarToCategory(car.getObjectId(), categoryName);
+
+            Exception illegalStateException = assertThrows(Exception.class,
+                    () -> carService.assignCarToCategory(car.getObjectId(), categoryName));
+            Assertions.assertEquals(InfoConstants.CAR_BELONGS_TO_CATEGORY, illegalStateException.getMessage());
+        }
+    }
+
+    @ParameterizedTest
     @CsvSource({ "VW, testCategory1, 0, 10, make, asc", "Hyundai, testCategory2, 0, 10, make, asc" })
     void testRemoveCarFromCategory_ShouldReturnRemovedQuantity(String make, String categoryName, int page, int size,
             String sortBy, String sortOrder) {
@@ -107,6 +123,19 @@ class CarServiceTest {
         for (Car car : cars) {
             carService.assignCarToCategory(car.getObjectId(), categoryName);
             Assertions.assertEquals(1, carService.removeCarFromCategory(car.getObjectId(), categoryName));
+        }
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "VW, testCategory1, 0, 10, make, asc", "Hyundai, testCategory2, 0, 10, make, asc" })
+    void testRemoveCarFromCategory_WhenCarIsNotAssigned_ShouldThrowIllegalStateException(String make,
+            String categoryName, int page, int size, String sortBy, String sortOrder) {
+        Page<Car> cars = carService.findCarsByMake(make, page, size, sortBy, sortOrder);
+
+        for (Car car : cars) {
+            Exception illegalStateException = assertThrows(Exception.class,
+                    () -> carService.removeCarFromCategory(car.getObjectId(), categoryName));
+            Assertions.assertEquals(InfoConstants.CAR_NOT_BELONGS_TO_CATEGORY, illegalStateException.getMessage());
         }
     }
 
