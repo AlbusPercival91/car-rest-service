@@ -27,7 +27,7 @@ public class CategoryService {
 
     public int createCategory(Category category) {
         if (categoryRepository.findById(category.getCategoryId()).isPresent()) {
-            log.info(InfoConstants.CATEGORY_EXISTS);
+            log.warn(InfoConstants.CATEGORY_EXISTS);
             throw new EntityExistsException(InfoConstants.CATEGORY_EXISTS);
         }
         Category newCategory = categoryRepository.save(category);
@@ -37,7 +37,7 @@ public class CategoryService {
 
     public int deleteCategoryById(int categoryId) {
         if (categoryRepository.findById(categoryId).isEmpty()) {
-            log.info(InfoConstants.CATEGORY_NOT_FOUND);
+            log.warn(InfoConstants.CATEGORY_NOT_FOUND);
             throw new EntityNotFoundException(InfoConstants.CATEGORY_NOT_FOUND);
         }
         categoryRepository.deleteById(categoryId);
@@ -72,6 +72,7 @@ public class CategoryService {
         if (carService.findCarById(carId).isPresent()) {
             return categoryRepository.getCarCategories(carId);
         }
+        log.warn(InfoConstants.CAR_NOT_FOUND);
         throw new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND);
     }
 }
