@@ -101,10 +101,10 @@ public class CarService {
         return carRepository.findAllByYearBetween(yearFrom, yearTo, pageRequest);
     }
 
-    public Page<Car> searchCars(String make, String model, Integer minYear, Integer maxYear, String category,
+    public Page<Car> searchCars(String make, String model, Integer minYear, Integer maxYear, String categoryName,
             Pageable pageable) {
-        if (category != null && !category.isEmpty()) {
-            return carRepository.findAllByCategory(category, pageable);
+        if (categoryName != null && !categoryName.isEmpty()) {
+            return carRepository.findAllByCategory(categoryName, pageable);
         } else if (make != null && !make.isEmpty()) {
             return carRepository.findAllByMake(make, pageable);
         } else if (model != null && !model.isEmpty()) {
