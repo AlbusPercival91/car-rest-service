@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -154,14 +156,22 @@ class CarControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    void testListCars_Success_ShouldGiveStatusIsOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars")).andExpect(MockMvcResultMatchers.status().isOk());
+    @ParameterizedTest
+    @CsvSource({ "10, model, desc" })
+    void testListCars_Success_ShouldGiveStatusIsOk(int size, String sortBy, String sortOrder) throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars").param("size", String.valueOf(size))
+                .param("sortBy", sortBy).param("sortOrder", sortOrder))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    void testSearchCars_Success_ShouldGiveStatusIsOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars/search"))
+    @ParameterizedTest
+    @CsvSource({ "testCategory, Nissan, Skyline, 2002, 2004, 0, 10, model, desc" })
+    void testSearchCars_Success_ShouldGiveStatusIsOk(String categoryName, String make, String model, int minYear,
+            int maxYear, int page, int size, String sortBy, String sortOrder) throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars/search").param("categoryName", categoryName)
+                .param("carId", UUID.randomUUID().toString()).param("page", String.valueOf(page))
+                .param("size", String.valueOf(size)).param("sortBy", sortBy).param("sortOrder", sortOrder))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 

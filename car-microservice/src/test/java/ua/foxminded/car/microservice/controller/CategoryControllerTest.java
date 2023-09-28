@@ -123,14 +123,20 @@ class CategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    void testSearchCategories_Success_ShouldGiveStatusIsOk() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/search"))
+    @ParameterizedTest
+    @CsvSource({ "testCategory, 0, 10, categoryName, asc" })
+    void testSearchCategories_Success_ShouldGiveStatusIsOk(String categoryName, int page, int size, String sortBy,
+            String sortOrder) throws Exception {
+        UUID carId = UUID.randomUUID();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/search").param("categoryName", categoryName)
+                .param("carId", carId.toString()).param("page", String.valueOf(page))
+                .param("size", String.valueOf(size)).param("sortBy", sortBy).param("sortOrder", sortOrder))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @ParameterizedTest
-    @CsvSource({ "testCategory, 0, 10, make, asc" })
+    @CsvSource({ "testCategory, 0, 10, categoryName, asc" })
     void testSearchCategories_Failure_ShouldGiveStatusIsNotFound(String categoryName, int page, int size, String sortBy,
             String sortOrder) throws Exception {
         UUID carId = UUID.randomUUID();
