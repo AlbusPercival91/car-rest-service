@@ -67,7 +67,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void testDeleteCar_Failure_ShouldGiveStatusIsNotFound() throws Exception {
+    void testDeleteCategory_Failure_ShouldGiveStatusIsNotFound() throws Exception {
         int categoryId = 123;
 
         when(categoryService.deleteCategoryById(categoryId))
@@ -119,7 +119,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void testSearchCars_Success_ShouldGiveStatusIsOk() throws Exception {
+    void testSearchCategories_Success_ShouldGiveStatusIsOk() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/search"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
