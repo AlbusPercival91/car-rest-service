@@ -4,12 +4,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import java.util.Optional;
+import java.util.UUID;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -123,4 +128,22 @@ class CategoryControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/search"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+    @ParameterizedTest
+    @CsvSource({ "testCategory, 0, 10, make, asc" })
+    void testSearchCategories_Failure_ShouldGiveStatusIsNotFound(String categoryName, int page, int size, String sortBy,
+            String sortOrder) throws Exception {
+        UUID carId = UUID.randomUUID();
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
+
+        when(categoryService.searchCategories(categoryName, carId, pageRequest))
+                .thenThrow(new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/categories/search").param("categoryName", categoryName)
+                .param("carId", carId.toString()).param("page", String.valueOf(page))
+                .param("size", String.valueOf(size)).param("sortBy", sortBy).param("sortOrder", sortOrder))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
 }

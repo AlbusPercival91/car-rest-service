@@ -141,14 +141,14 @@ class CarServiceTest {
 
     @ParameterizedTest
     @CsvSource({ "Sedan, 0, 10, make, asc", "Hatchback, 0, 10, make, asc", "SUV, 0, 10, make, asc" })
-    void testFindAllByCategory_ShouldReturnCarsAssignedToCategory(String categoryName, int page, int size,
-            String sortBy, String sortOrder) {
+    void testFindCarsByCategory_ShouldReturnNotEmptyPage(String categoryName, int page, int size, String sortBy,
+            String sortOrder) {
         Assertions.assertTrue(!carService.findCarsByCategory(categoryName, page, size, sortBy, sortOrder).isEmpty());
     }
 
     @ParameterizedTest
     @CsvSource({ "testCategory, 0, 10, make, asc" })
-    void testFindAllByCategory_WhenCategoryNotExists_ShouldReturnEmptyPage(String categoryName, int page, int size,
+    void testFindCarsByCategory_WhenCategoryNotExists_ShouldReturnEmptyPage(String categoryName, int page, int size,
             String sortBy, String sortOrder) {
         Assertions.assertTrue(carService.findCarsByCategory(categoryName, page, size, sortBy, sortOrder).isEmpty());
     }
