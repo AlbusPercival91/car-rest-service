@@ -79,11 +79,13 @@ public class CategoryController {
             @RequestParam(required = false) UUID carId, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "make") String sortBy,
             @RequestParam(defaultValue = "asc") String sortOrder) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
+            Page<Category> searchResult = categoryService.searchCategories(categoryName, carId, pageRequest);
+            return ResponseEntity.ok(searchResult);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
-
-        Page<Category> searchResult = categoryService.searchCategories(categoryName, carId, pageRequest);
-
-        return ResponseEntity.ok(searchResult);
     }
 }
