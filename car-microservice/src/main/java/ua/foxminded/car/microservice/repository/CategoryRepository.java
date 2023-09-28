@@ -1,8 +1,9 @@
 package ua.foxminded.car.microservice.repository;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,5 +18,5 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
                  JOIN ct.cars c
                  WHERE c.objectId = :carId
             """)
-    Set<Category> getCarCategories(@Param("carId") UUID carId);
+    Page<Category> getCarCategories(@Param("carId") UUID carId, Pageable pageable);
 }

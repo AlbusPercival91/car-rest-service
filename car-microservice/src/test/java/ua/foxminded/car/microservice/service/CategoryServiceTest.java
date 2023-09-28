@@ -76,8 +76,10 @@ class CategoryServiceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({ "Dodge, Neon, 2003, 1", "Nissan, Skyline, 1999, 2", "Opel, Omega, 1997, 3" })
-    void testGetCarCategories_ShouldReturnCarCategories(String make, String model, int year, int categoryId) {
+    @CsvSource({ "Dodge, Neon, 2003, 1, 0, 10, categoryName, asc", "Nissan, Skyline, 1999, 2, 0, 10, categoryName, asc",
+            "Opel, Omega, 1997, 3, 0, 10, categoryName, asc" })
+    void testGetCarCategories_ShouldReturnCarCategories(String make, String model, int year, int categoryId, int page,
+            int size, String sortBy, String sortOrder) {
         Optional<Category> category = categoryService.findCategoryById(categoryId);
         Car car = new Car(make, model, year);
         car.setObjectId(UUID.randomUUID());
@@ -85,16 +87,18 @@ class CategoryServiceTest {
         carservice.createCar(car);
         carservice.assignCarToCategory(car.getObjectId(), category.get().getCategoryName());
 
-        Assertions.assertTrue(categoryService.getCarCategories(car.getObjectId()).contains(category.get()));
+        Assertions.assertEquals(true, categoryService.getCarCategories(car.getObjectId(), page, size, sortBy, sortOrder)
+                .get().findAny().equals(category));
     }
 
     @ParameterizedTest
-    @CsvSource({ "1", "2", "3" })
-    void testGetCarCategories_WhenCarNotFound_ShouldThrowEntityNotFoundException(int categoryId) {
+    @CsvSource({ "1, 1, 0, 10, categoryName, asc", "2, 1, 0, 10, categoryName, asc", "3, 1, 0, 10, categoryName, asc" })
+    void testGetCarCategories_WhenCarNotFound_ShouldThrowEntityNotFoundException(int categoryId, int page, int size,
+            String sortBy, String sortOrder) {
         Optional<Category> category = categoryService.findCategoryById(categoryId);
 
-        Exception entityNotFoundException = assertThrows(Exception.class,
-                () -> categoryService.getCarCategories(UUID.randomUUID()).contains(category.get()));
+        Exception entityNotFoundException = assertThrows(Exception.class, () -> categoryService
+                .getCarCategories(UUID.randomUUID(), page, size, sortBy, sortOrder).get().findAny().equals(category));
         Assertions.assertEquals(InfoConstants.CAR_NOT_FOUND, entityNotFoundException.getMessage());
     }
 }

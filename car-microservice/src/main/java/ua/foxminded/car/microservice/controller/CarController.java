@@ -97,13 +97,13 @@ public class CarController {
     @GetMapping("/search")
     public ResponseEntity<Page<Car>> searchCars(@RequestParam(required = false) String make,
             @RequestParam(required = false) String model, @RequestParam(required = false) Integer minYear,
-            @RequestParam(required = false) Integer maxYear, @RequestParam(required = false) String category,
+            @RequestParam(required = false) Integer maxYear, @RequestParam(required = false) String categoryName,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "make") String sortBy, @RequestParam(defaultValue = "asc") String sortOrder) {
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
 
-        Page<Car> searchResult = carService.searchCars(make, model, minYear, maxYear, category, pageRequest);
+        Page<Car> searchResult = carService.searchCars(make, model, minYear, maxYear, categoryName, pageRequest);
 
         return ResponseEntity.ok(searchResult);
     }
