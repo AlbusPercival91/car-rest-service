@@ -145,7 +145,7 @@ class CarControllerTest {
     }
 
     @Test
-    void testGetCar() throws Exception {
+    void testGetCar_Success_ShouldGiveStatusIsOk() throws Exception {
         UUID carId = UUID.randomUUID();
 
         when(carService.findCarById(carId)).thenReturn(Optional.of(new Car()));
@@ -155,12 +155,12 @@ class CarControllerTest {
     }
 
     @Test
-    void testListCars() throws Exception {
+    void testListCars_Success_ShouldGiveStatusIsOk() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars")).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    void testSearchCars() throws Exception {
+    void testSearchCars_Success_ShouldGiveStatusIsOk() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/cars/search"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
