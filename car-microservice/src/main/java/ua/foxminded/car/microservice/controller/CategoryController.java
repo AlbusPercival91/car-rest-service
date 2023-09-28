@@ -77,7 +77,7 @@ public class CategoryController {
     @GetMapping("/search")
     public ResponseEntity<Page<Category>> searchCategories(@RequestParam(required = false) String categoryName,
             @RequestParam(required = false) UUID carId, @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "make") String sortBy,
+            @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "categoryName") String sortBy,
             @RequestParam(defaultValue = "asc") String sortOrder) {
         try {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy);
