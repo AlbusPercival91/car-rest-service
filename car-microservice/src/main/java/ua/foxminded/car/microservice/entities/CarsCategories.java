@@ -1,5 +1,6 @@
 package ua.foxminded.car.microservice.entities;
 
+import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,16 +19,14 @@ import lombok.Setter;
 public class CarsCategories {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
     @Column(name = "car_id")
-    private String carId;
+    private UUID carId;
 
     @Column(name = "category_id")
     private int categoryId;
-
-    public CarsCategories(String carId, int categoryId) {
-        this.carId = carId;
-        this.categoryId = categoryId;
-    }
 
 }

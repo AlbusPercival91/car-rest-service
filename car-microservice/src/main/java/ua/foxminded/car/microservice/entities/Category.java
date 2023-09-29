@@ -21,7 +21,7 @@ import lombok.Setter;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private int categoryId;
 
@@ -33,6 +33,11 @@ public class Category {
 
     public Category(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    @Override
+    public String toString() {
+        return "Category(id=" + categoryId + ", name=" + categoryName + ")";
     }
 
 }
