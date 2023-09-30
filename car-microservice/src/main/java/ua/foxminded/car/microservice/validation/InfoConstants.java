@@ -1,4 +1,4 @@
-package ua.foxminded.university.dao.validation;
+package ua.foxminded.car.microservice.validation;
 
 public final class InfoConstants {
 

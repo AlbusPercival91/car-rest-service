@@ -1,4 +1,4 @@
-package ua.foxminded.car.microservice.entities;
+package ua.foxminded.car.microservice.dao.entities;
 
 import jakarta.persistence.ManyToMany;
 import java.util.HashSet;

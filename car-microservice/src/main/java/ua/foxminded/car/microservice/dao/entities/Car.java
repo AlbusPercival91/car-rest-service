@@ -1,4 +1,4 @@
-package ua.foxminded.car.microservice.entities;
+package ua.foxminded.car.microservice.dao.entities;
 
 import java.util.Set;
 import java.util.UUID;

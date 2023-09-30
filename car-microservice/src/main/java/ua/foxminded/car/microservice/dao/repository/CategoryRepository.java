@@ -1,4 +1,4 @@
-package ua.foxminded.car.microservice.repository;
+package ua.foxminded.car.microservice.dao.repository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -7,7 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ua.foxminded.car.microservice.entities.Category;
+
+import ua.foxminded.car.microservice.dao.entities.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 

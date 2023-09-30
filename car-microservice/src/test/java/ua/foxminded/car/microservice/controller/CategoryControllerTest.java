@@ -23,9 +23,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import ua.foxminded.car.microservice.entities.Category;
-import ua.foxminded.car.microservice.service.CategoryService;
-import ua.foxminded.university.dao.validation.InfoConstants;
+import ua.foxminded.car.microservice.dao.entities.Category;
+import ua.foxminded.car.microservice.dao.service.CategoryService;
+import ua.foxminded.car.microservice.validation.InfoConstants;
 
 @WebMvcTest({ CategoryController.class })
 @ActiveProfiles("test-container")
