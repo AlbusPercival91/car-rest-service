@@ -16,11 +16,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-
 import ua.foxminded.car.microservice.dao.entities.Car;
 import ua.foxminded.car.microservice.dao.entities.Category;
-import ua.foxminded.car.microservice.dao.service.CarService;
-import ua.foxminded.car.microservice.dao.service.CategoryService;
 import ua.foxminded.car.microservice.validation.InfoConstants;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
