@@ -19,8 +19,8 @@ public class SecurityConfig {
             auth.requestMatchers(HttpMethod.GET, "/api/v1/cars/**", "/api/v1/categories/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/v1/cars/**", "/api/v1/categories/**").authenticated()
                     .requestMatchers(HttpMethod.PUT, "/api/v1/cars/**", "/api/v1/categories/**").authenticated()
-                    .requestMatchers(HttpMethod.DELETE, "/api/v1/cars/**", "/api/v1/categories/**").authenticated()
-                    .anyRequest().authenticated();
+                    .requestMatchers(HttpMethod.DELETE, "/api/v1/cars/**",
+                            "/api/v1/categories/**").authenticated().anyRequest().authenticated();
         }).oauth2Login(withDefaults()).formLogin(Customizer.withDefaults()).build();
     }
 }
