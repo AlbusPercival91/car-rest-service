@@ -1,4 +1,4 @@
-package ua.foxminded.car.microservice.config;
+package ua.foxminded.car.microservice.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +16,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/v1/cars/**", "/api/v1/categories/**").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(withDefaults()).formLogin(Customizer.withDefaults()).build();
     }
