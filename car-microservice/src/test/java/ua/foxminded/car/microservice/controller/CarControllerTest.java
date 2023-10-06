@@ -3,6 +3,7 @@ package ua.foxminded.car.microservice.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayNameGeneration;
