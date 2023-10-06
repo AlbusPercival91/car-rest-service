@@ -3,6 +3,7 @@ package ua.foxminded.car.microservice.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -29,6 +31,7 @@ import ua.foxminded.car.microservice.validation.InfoConstants;
 
 @WebMvcTest({ CategoryController.class })
 @ActiveProfiles("test-container")
+@WithMockUser(roles = "ADMIN")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class CategoryControllerTest {
 
@@ -45,8 +48,8 @@ class CategoryControllerTest {
 
         when(categoryService.createCategory(any(Category.class))).thenReturn(category.getCategoryId());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/categories").contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(category)))
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/categories").with(csrf().asHeader())
+                .contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(category)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").value(category.getCategoryId()));
     }
@@ -58,8 +61,8 @@ class CategoryControllerTest {
         when(categoryService.createCategory(any(Category.class)))
                 .thenThrow(new EntityExistsException(InfoConstants.CATEGORY_EXISTS));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/categories").contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(category)))
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/categories").with(csrf().asHeader())
+                .contentType(MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(category)))
                 .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 
@@ -67,7 +70,8 @@ class CategoryControllerTest {
     void testDeleteCategory_Success_ShouldGiveStatusIsNoContent() throws Exception {
         int categoryId = 123;
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/categories/{categoryId}", categoryId))
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/v1/categories/{categoryId}", categoryId).with(csrf().asHeader()))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
@@ -78,7 +82,8 @@ class CategoryControllerTest {
         when(categoryService.deleteCategoryById(categoryId))
                 .thenThrow(new EntityNotFoundException(InfoConstants.CATEGORY_NOT_FOUND));
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/categories/{categoryId}", categoryId))
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/v1/categories/{categoryId}", categoryId).with(csrf().asHeader()))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
@@ -88,7 +93,7 @@ class CategoryControllerTest {
         Category updatedCategory = new Category("testCategory");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/categories/{categoryId}", categoryId)
-                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf().asHeader()).contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(updatedCategory)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -102,7 +107,7 @@ class CategoryControllerTest {
                 .thenThrow(new EntityNotFoundException(InfoConstants.CATEGORY_NOT_FOUND));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/categories/{categoryId}", categoryId)
-                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf().asHeader()).contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(updatedCategory)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
