@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
-import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
@@ -28,9 +27,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.authorizeHttpRequests(
-                auth -> auth.requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll().anyRequest().authenticated())
-                .oauth2Login(withDefaults()).formLogin(withDefaults()).build();
+        http.authorizeHttpRequests(
+                auth -> auth.requestMatchers(HttpMethod.GET, "/api/v1/cars/**", "/api/v1/categories/**").permitAll()
+                        .anyRequest().authenticated());
+        http.oauth2ResourceServer(rs -> rs.jwt(jwt -> jwt.decoder(jwtDecoder())));
+        return http.build();
     }
 
     JwtDecoder jwtDecoder() {
