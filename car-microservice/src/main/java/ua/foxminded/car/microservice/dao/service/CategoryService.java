@@ -55,6 +55,7 @@ public class CategoryService {
         });
 
         BeanUtils.copyProperties(targetCategory, existingCategory, "categoryId");
+        log.info(InfoConstants.UPDATE_SUCCESS);
         return categoryRepository.save(existingCategory);
     }
 
