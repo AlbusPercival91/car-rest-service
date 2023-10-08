@@ -107,7 +107,7 @@ public class CategoryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = InfoConstants.CATEGORIES_LISTED, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)) }),
-            @ApiResponse(responseCode = "404", description = InfoConstants.CATEGORY_NOT_FOUND, content = @Content) })
+            @ApiResponse(responseCode = "404", description = InfoConstants.CAR_NOT_FOUND, content = @Content) })
     @GetMapping("/search")
     public ResponseEntity<Page<Category>> searchCategories(@RequestParam(required = false) String categoryName,
             @RequestParam(required = false) UUID carId, @RequestParam(defaultValue = "0") int page,

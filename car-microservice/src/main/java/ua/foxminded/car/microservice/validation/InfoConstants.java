@@ -20,7 +20,6 @@ public final class InfoConstants {
     public static final String CAR_NOT_BELONGS_TO_CATEGORY = "Car is not assigned to this category";
     public static final String CATEGORIES_LISTED = "Listed all Categories";
     public static final String CARS_LISTED = "Listed all Cars";
-
     public static final String CREATE_CATEGORY = "Create new Category";
     public static final String DELETE_CATEGORY = "Delete Category";
     public static final String UPDATE_CATEGORY = "Update Category";
@@ -33,5 +32,7 @@ public final class InfoConstants {
     public static final String GET_CAR_BY_ID = "Get Car by its id";
     public static final String LIST_CARS = "Get List of all Cars";
     public static final String SEARCH_CARS = "Search Cars";
+    public static final String ASSIGN_CAR = "Assign Car to Category";
+    public static final String REASSIGN_CAR = "Remove Car from Category";
 
 }
