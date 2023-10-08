@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.car.microservice.dao.entities.Category;
@@ -35,7 +36,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Operation(summary = InfoConstants.CREATE_CATEGORY)
+    @Operation(summary = InfoConstants.CREATE_CATEGORY, security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = InfoConstants.CREATE_SUCCESS, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)) }),
@@ -50,7 +51,7 @@ public class CategoryController {
         }
     }
 
-    @Operation(summary = InfoConstants.DELETE_CATEGORY)
+    @Operation(summary = InfoConstants.DELETE_CATEGORY, security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = InfoConstants.DELETE_SUCCESS, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)) }),
@@ -65,7 +66,7 @@ public class CategoryController {
         }
     }
 
-    @Operation(summary = InfoConstants.UPDATE_CATEGORY)
+    @Operation(summary = InfoConstants.UPDATE_CATEGORY, security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = InfoConstants.UPDATE_SUCCESS, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Category.class)) }),

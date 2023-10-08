@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import ua.foxminded.car.microservice.dao.entities.Car;
@@ -35,7 +36,7 @@ public class CarController {
     @Autowired
     private CarService carService;
 
-    @Operation(summary = InfoConstants.CREATE_CAR)
+    @Operation(summary = InfoConstants.CREATE_CAR, security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = InfoConstants.CREATE_SUCCESS, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class)) }),
@@ -50,7 +51,7 @@ public class CarController {
         }
     }
 
-    @Operation(summary = InfoConstants.DELETE_CAR)
+    @Operation(summary = InfoConstants.DELETE_CAR, security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = InfoConstants.DELETE_SUCCESS, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class)) }),
@@ -65,7 +66,7 @@ public class CarController {
         }
     }
 
-    @Operation(summary = InfoConstants.UPDATE_CAR)
+    @Operation(summary = InfoConstants.UPDATE_CAR, security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = InfoConstants.UPDATE_SUCCESS, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class)) }),
@@ -80,7 +81,7 @@ public class CarController {
         }
     }
 
-    @Operation(summary = InfoConstants.ASSIGN_CAR)
+    @Operation(summary = InfoConstants.ASSIGN_CAR, security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = InfoConstants.ASSIGN_SUCCESS, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class)) }),
@@ -95,7 +96,7 @@ public class CarController {
         }
     }
 
-    @Operation(summary = InfoConstants.REASSIGN_CAR)
+    @Operation(summary = InfoConstants.REASSIGN_CAR, security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = InfoConstants.DELETE_SUCCESS, content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Car.class)) }),
