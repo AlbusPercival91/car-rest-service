@@ -1,4 +1,4 @@
-package ua.foxminded.car.microservice.service;
+package ua.foxminded.car.microservice.dao.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Optional;
@@ -16,9 +16,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import ua.foxminded.car.microservice.entities.Car;
-import ua.foxminded.car.microservice.entities.Category;
-import ua.foxminded.university.dao.validation.InfoConstants;
+import ua.foxminded.car.microservice.dao.entities.Car;
+import ua.foxminded.car.microservice.dao.entities.Category;
+import ua.foxminded.car.microservice.validation.InfoConstants;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {
         CategoryService.class, CarService.class }))

@@ -1,4 +1,4 @@
-package ua.foxminded.car.microservice.repository;
+package ua.foxminded.car.microservice.dao.repository;
 
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ua.foxminded.car.microservice.entities.Car;
+import ua.foxminded.car.microservice.dao.entities.Car;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, UUID> {

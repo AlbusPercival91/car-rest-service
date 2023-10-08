@@ -1,4 +1,4 @@
-package ua.foxminded.car.microservice.service;
+package ua.foxminded.car.microservice.dao.service;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,10 +15,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ua.foxminded.car.microservice.entities.Category;
-import ua.foxminded.car.microservice.repository.CarRepository;
-import ua.foxminded.car.microservice.repository.CategoryRepository;
-import ua.foxminded.university.dao.validation.InfoConstants;
+import ua.foxminded.car.microservice.dao.entities.Category;
+import ua.foxminded.car.microservice.dao.repository.CarRepository;
+import ua.foxminded.car.microservice.dao.repository.CategoryRepository;
+import ua.foxminded.car.microservice.validation.InfoConstants;
 
 @Slf4j
 @RequiredArgsConstructor

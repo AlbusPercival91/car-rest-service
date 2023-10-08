@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import ua.foxminded.car.microservice.entities.Category;
-import ua.foxminded.car.microservice.service.CategoryService;
+import ua.foxminded.car.microservice.dao.entities.Category;
+import ua.foxminded.car.microservice.dao.service.CategoryService;
 
 @RestController
 @RequestMapping("/api/v1/categories")

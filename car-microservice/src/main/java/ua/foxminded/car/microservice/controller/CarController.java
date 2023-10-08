@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import ua.foxminded.car.microservice.entities.Car;
-import ua.foxminded.car.microservice.service.CarService;
+import ua.foxminded.car.microservice.dao.entities.Car;
+import ua.foxminded.car.microservice.dao.service.CarService;
 
 @RestController
 @RequestMapping("/api/v1/cars")

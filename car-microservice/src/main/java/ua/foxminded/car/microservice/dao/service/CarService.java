@@ -1,4 +1,4 @@
-package ua.foxminded.car.microservice.service;
+package ua.foxminded.car.microservice.dao.service;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -13,9 +13,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ua.foxminded.car.microservice.entities.Car;
-import ua.foxminded.car.microservice.repository.CarRepository;
-import ua.foxminded.university.dao.validation.InfoConstants;
+import ua.foxminded.car.microservice.dao.entities.Car;
+import ua.foxminded.car.microservice.dao.repository.CarRepository;
+import ua.foxminded.car.microservice.validation.InfoConstants;
 
 @Slf4j
 @RequiredArgsConstructor
