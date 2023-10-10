@@ -50,6 +50,7 @@ public class CarService {
             return new EntityNotFoundException(InfoConstants.CAR_NOT_FOUND);
         });
         BeanUtils.copyProperties(targetCar, existingCar, "objectId");
+        log.info(InfoConstants.UPDATE_SUCCESS);
         return carRepository.save(existingCar);
     }
 
